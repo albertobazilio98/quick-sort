@@ -1,18 +1,6 @@
-.form {
-  width: 90%;
-  margin: auto;
+.card {
+  margin-top: 10%;
 }
-.form .label{
-  margin: 0 10px;
+.spacing {
+  margin: 20px 0;
 }
-.flex-box {
-  display: flex;
-}
-.form .input {
-  width: 60px;
-  margin: 10px;
-}
-.form .btn {
-  margin: 10px;
-}
-

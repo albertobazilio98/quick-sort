@@ -26,27 +26,37 @@ let chuteDaSorte = (A, p, r) => {
   }
 }
 
+
 var arr = [];
+var timelapse = 0;
 
 $(document).ready( () => {
   $('#insert-1').click( () => {
-    arr.push($('#1-elemen').val()); 
+    if (parseInt($('#1-elemen').val())) {
+      arr.push(parseInt($('#1-elemen').val()));
+    }
     console.log(arr);
   })
   $('#insert-n').click( () => {
-    let qtd = $('#n-elemen').val()
+    let qtd = 0;
+    if (parseInt($('#n-elemen').val())) {
+      qtd = parseInt($('#n-elemen').val());
+    }
     for (let i = 0; i < qtd; i++) {
       arr.push(Math.floor(Math.random()*1000))
     }
     console.log(arr);
   })
   $('#sort').click( () => {
+    var t0 = performance.now();
     chuteDaSorte(arr, 0, arr.length - 1)
+    timelapse = performance.now() - t0;
     console.log(arr)
+    console.log(timelapse)
   })
   $('#open-modal').click( () => {
     $('#vet').remove();
     txt = arr.join('</br>')
-    $('#modal-body').append(`<div id="vet">${txt}</div>`);
+    $('#modal-body').append(`<span id="vet">Tempo gasto na ordenação: ${timelapse} ms </br>${txt}</span>`);
   })
 });

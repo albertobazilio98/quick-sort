@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="app.css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@3.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <v-content>
+        <template>
+          <v-card
+            max-width="800"
+            class="mx-auto card"
+          >
+            <v-card-text>
+              <span> Inserir um elemento </span>
+              <v-text-field
+                v-model="elem"
+                label="Elemento"
+              ></v-text-field>
+              <v-btn class="mr-4" @click="insert1"> Inserir </v-btn>
+              <v-divider class="spacing"></v-divider>
+              <span> Inserir n elementos </span>
+              <v-text-field
+                v-model="n"
+                label="n"
+              ></v-text-field>
+              <v-btn class="mr-4" @click="insertN"> Inserir </v-btn>
+              <v-divider class="spacing"></v-divider>
+              <v-btn class="mr-4" @click="toggleVetDialog"> Exibir vetor </v-btn>
+              <v-btn class="mr-4" @click="quickSort"> Ordenar </v-btn>
+              <v-btn class="mr-4" @click="clear"> Limpar vetor </v-btn>
+              <v-divider class="spacing"></v-divider>
+              <v-btn class="mr-4" @click="toggleQsDialog"> Ver quick sort passo a passo </v-btn>
+
+            </v-card-text>
+          </v-card>
+
+          <v-dialog v-model="vetDialog" scrollable max-width="300px">
+            <v-card>
+              <v-card-title>Vetor - Tempo gasto: {{ timelapse }} ms</v-card-title>
+              <v-divider></v-divider>
+              <v-card-text style="height: 300px;">
+                <li v-for="elem in vet">{{elem}}</li>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-actions>
+                <v-btn color="blue darken-1" text @click="toggleVetDialog">Close</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+          <v-dialog v-model="qsDialog" max-width="900px" :key="renderMeAgainPlox">
+            <v-card>
+              <v-card-title>Vetor - Tempo gasto: {{ timelapse }} ms</v-card-title>
+              <v-divider></v-divider>
+              <v-card-text>
+                <!-- <v-range-slider
+                  v-model="range"
+                  :max="max"
+                  :min="min"
+                  hide-details
+                  class="align-center"
+                >
+                  <template v-slot:prepend>
+                    <v-text-field
+                      v-model="range[0]"
+                      class="mt-0 pt-0"
+                      hide-details
+                      single-line
+                      type="number"
+                      style="width: 60px"
+                    ></v-text-field>
+                  </template>
+                  <template v-slot:append>
+                    <v-text-field
+                      v-model="range[1]"
+                      class="mt-0 pt-0"
+                      hide-details
+                      single-line
+                      type="number"
+                      style="width: 60px"
+                    ></v-text-field>
+                  </template>
+                </v-range-slider> -->
+                <v-row>
+                  <v-col cols="10" md="1">
+                    <v-text-field
+                      :key="renderMeAgainPlox"
+                      v-model="vetExem[0]"                    
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="10" md="1">
+                    <v-text-field
+                      v-model="vetExem[1]"                    
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="10" md="1">
+                    <v-text-field
+                      v-model="vetExem[2]"                    
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="10" md="1">
+                    <v-text-field
+                      v-model="vetExem[3]"                    
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="10" md="1">
+                    <v-text-field
+                      v-model="vetExem[4]"                    
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="10" md="1">
+                    <v-text-field
+                      v-model="vetExem[5]"                    
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="10" md="1">
+                    <v-text-field
+                      v-model="vetExem[6]"                    
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="10" md="1">
+                    <v-text-field
+                      v-model="vetExem[7]"                    
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="10" md="1">
+                    <v-text-field
+                      v-model="vetExem[8]"                    
+                    ></v-text-field>
+                  </v-col>
+                  <v-col cols="10" md="1">
+                    <v-text-field
+                      v-model="vetExem[9]"                    
+                    ></v-text-field>
+                  </v-col>
+                </v-row>
+              </v-card-text>
+              <v-divider></v-divider>
+              <v-card-actions>
+                <v-btn color="blue darken-1" text @click="randomizeExem">Aleatorizar</v-btn>
+                <v-btn color="blue darken-1" text @click="sortExem">Ordenar</v-btn>
+                <v-btn color="blue darken-1" text @click="toggleQsDialog">Close</v-btn>
+                <v-btn color="blue darken-1" text @click="toggleContinue">continuar</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </template>
+      </v-content>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.0"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <script>
+    Vue.config.devtools = true
+    new Vue({
+      el: '#app',
+      vuetify: new Vuetify(),
+      data: {
+        elem: '',
+        n: '',
+        vet: [],
+        renderMeAgainPlox: 0,
+        timelapse: 0,
+        vetDialog: false,
+        qsDialog: false,
+        vetExem: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        p: 0,
+        q: 0,
+        r: 0,
+        continue: false,
+        text: ""
+      },
+      methods: {
+        insert1() {
+          this.vet.push(parseInt(this.elem));
+          console.log(this.vet);
+        },
+        insertN() {
+          for(let i = this.n; i > 0; i--) {
+            this.vet.push(Math.floor(Math.random  ()*1000));
+          }
+          console.log(this.vet);
+        },
+        randomizeExem() {
+          this.vetExem.forEach( (elem, i) => {
+            this.vetExem[i] = Math.floor(Math.random()*1000);
+          })
+          this.updateDialogData();
+        },
+        updateDialogData() {
+          this.toggleQsDialog()
+          this.wait(500);
+          this.toggleQsDialog()
+        },
+        clear() {
+          this.vet.splice(this.vet);
+        },
+        toggleVetDialog() {
+          this.vetDialog = !this.vetDialog;
+        },
+        toggleQsDialog() {
+          this.qsDialog = !this.qsDialog;
+        },
+        toggleContinue() {
+          this.continue = !this.continue;
+        },
+        quickSort() {
+          this.timelapse = 0;
+          var t0 = performance.now();
+          chuteDaSorte(this.vet, 0, this.vet.length - 1);
+          this.timelapse = (performance.now() - t0).toFixed(4);
+          console.log(this.vet);
+        },
+        sortExem() {
+          this.vetExem.forEach( (elem, i) => {
+            this.vetExem[i] = parseInt(elem)
+          })
+          this.timelapse = 0;
+          var t0 = performance.now();
+          var A = this.vetExem;
+          this.quickSortStepByStep(A, 0, this.vetExem.length - 1);
+          this.timelapse = (performance.now() - t0).toFixed(4);
+        },
+        quickSortStepByStep(A, p, r) {
+          this.p = p;
+          this.r = r;
+          this.vetExem = A;
+          if (p < r) {
+            q = this.separaStepByStep(A, p, r);
+            this.quickSortStepByStep(A, p, q);
+            this.quickSortStepByStep(A, q+1, r);
+          }
+        },
+        separaStepByStep(A, p, r) {
+          let x = A[p];
+          let i = p-1;
+          let j = r+1;
+          while (true) {
+            j--;
+            while (x < A[j]) {
+              j--;
+            }
+            i++;
+            while (x > A[i]){
+              i++;
+            }
+            if (i < j) {
+              [A[i], A[j]] = [A[j], A[i]];
+              this.vetExem = A;
+            } else {
+              return j;
+            }
+          }
+        },
+        wait(t){
+          var start = new Date().getTime();
+          var end = start;
+          while(end < start + t) {
+            end = new Date().getTime();
+          }
+        }
+      },
+      watch: {
+        vetExem: function() {
+          console.log("batata")
+        }
+      }
+    })
+    //aqui que vc olha professor
+    //método quick sort
+    let chuteDaSorte = (A, p, r) => {
+      if (p < r) {
+        let q = separa(A, p, r);
+        chuteDaSorte (A, p, q);
+        chuteDaSorte(A, q+1, r);
+      }
+    }
+    //método separa
+    let separa = (A, p, r) => {
+      let x = A[p];
+      let i = p-1;
+      let j = r+1;
+      while (true) {
+        j--;
+        while (x < A[j]) {
+          j--;
+        }
+        i++;
+        while (x > A[i]) {
+          i++;
+        }
+        if (i < j) {
+          [A[i], A[j]] = [A[j], A[i]];
+        } else {
+          return j;
+        }
+      }
+    }
+  </script>
+</body>
+</html>
